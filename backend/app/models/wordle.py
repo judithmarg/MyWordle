@@ -7,6 +7,7 @@ class Wordle(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
     word_correct = Column(String(5), nullable=False)
+    word_attempt = Column(String(5), nullable=True)
     n_tries = Column(Integer, default=0 ,nullable=False)
     is_correct = Column(Boolean, default=False )
 
