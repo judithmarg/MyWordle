@@ -13,7 +13,7 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autoflush=False, autocommit=False, bind=engine)
 
 def get_db():
-    db = SessionLocal
+    db = SessionLocal()
     try:
         yield db
     except:
