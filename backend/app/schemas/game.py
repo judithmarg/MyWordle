@@ -13,9 +13,11 @@ class WordPlayUpdate(BaseModel):
 
 class WordPlayResponse(WordPlayRequest):
     id: int
+    created_at = datetime
+
+class WordCompareResponse(WordPlayResponse):
     is_correct: bool
-    time_now = datetime
-    correct_pos_index = Optional(List[int]) = []
-    different_pos_index = Optional(List[int]) = []
+    correct_pos_index = Optional(List[(str, int)]) = []
+    different_pos_index = Optional(List[(str, int)]) = []
     incorrect_used_letters = Optional(List[str]) = []
 
