@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict, Tuple
 from pydantic import BaseModel
 from datetime import datetime
   
@@ -23,13 +23,11 @@ class WordPlayResponse(WordPlayRequest):
 
     class Config:
         from_attributes = True
-    
-class WordIndex(BaseModel):
-    word: str
-    index: int
 
 class WordCompareResponse(WordPlayResponse):
-    correct_pos_index: Optional[List[WordIndex]] = []
-    different_pos_index: Optional[List[WordIndex]] = []
+    correct_pos_index: Optional[List[Tuple[int, str]]] = None
+    different_pos_index: Optional[List[Tuple[int, str]]] = None
     incorrect_used_letters: Optional[List[str]] = []
 
+    class Config:
+        from_attributes = True

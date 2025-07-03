@@ -53,23 +53,23 @@ def compare_word_data(id: int, db:Session):
         wordle = db.query(Wordle).filter(Wordle.id == id).first()
         if not wordle:
             raise HTTPException(status_code=404, detail="Wordle not found with that id.")
-        print(f"aca esta {wordle.id}")
+        
         word_attempt = wordle.word_attempt
         word_correct = wordle.word_correct
-        correct = filter(lambda l, ind: l in word_correct and l == word_correct[ind], word_attempt)
-        different = filter(lambda l, ind: l in word_correct and l != word_correct[ind], word_attempt)
-        incorrect = filter(lambda l: l not in word_correct, word_attempt)
-        print(f"aqui los correctos: {correct}")
-        return {
-            "user_id":wordle.user_id,
-            "word_correct":wordle.word_correct,
-            "word_attempt":wordle.word_attempt,
-            "n_tries":wordle.n_tries,
-            "is_correct":len(incorrect) == 0 and len(different) == 0,
-            "correct_pos_index":correct,
-            "different_pos_index":different,
-            "incorrect_used_letters":incorrect
-        }
+        correct = filter(lambda lind: lind[1] in word_correct and lind[1] == word_correct[lind[0]], enumerate(word_attempt))
+        different = filter(lambda lind: lind[1] in word_correct and lind[1] != word_correct[lind[0]], enumerate(word_attempt))
+        incorrect = [l for l in wordle.word_attempt if l not in word_correct ]
+        return WordCompareResponse(
+            user_id=wordle.user_id,
+            word_correct=wordle.word_correct,
+            word_attempt=wordle.word_attempt,
+            n_tries=wordle.n_tries,
+            id=wordle.id,
+            is_correct=False,
+            correct_pos_index=list(correct),
+            different_pos_index=list(different),
+            incorrect_used_letters=incorrect
+        )
     except Exception as e:
         print(f"en este caso el error es {e}")
 

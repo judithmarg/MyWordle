@@ -14,7 +14,7 @@ def get_all_wordle_attempts(db: Session=Depends(get_db)):
     """
     return get_all_wordle_plays(db)
 
-@router.post("/")
+@router.post("/", response_model=WordPlayResponse)
 def create_word_first(word_data: WordPlayRequest, db: Session=Depends(get_db)):
     """
     Save the first attempt
@@ -41,15 +41,18 @@ def update_word(play_id: int, word_data: WordPlayUpdate, db: Session=Depends(get
         raise HTTPException(status_code=404, detail="Error with save data wordle")
     return response
 
-@router.get("/compare/{play_id}")
+@router.get("/compare/{play_id}", response_model=WordCompareResponse)
 def compare_word(play_id: int, db: Session=Depends(get_db)):
     """
     Compare the attempt with real_word
     """
-    response = compare_word_data(play_id, db)
-    if not response:
-        raise HTTPException(status_code=404, detail="Error with wordle id, it might not exist.")
-    return response
+    try:
+        response = compare_word_data(play_id, db)
+        # if not response:
+        #     raise HTTPException(status_code=404, detail="Error with wordle id, it might not exist.")
+        return response
+    except Exception as e:
+        print(f"en este caso el error triste es {e}")
 
 @router.get("/verify/{word}")
 def verify_word(word: str):
