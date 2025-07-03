@@ -4,9 +4,8 @@ from sqlalchemy.orm import Session
 from app.models.wordle import Wordle
 from app.schemas.game import WordPlayRequest, WordPlayUpdate, WordPlayResponse, WordCompareResponse
 
-def get_all_wordle_plays(db: Session):
-    t =  db.query(Wordle).all()
-    return t
+def get_all_wordle_plays(db: Session): 
+    return db.query(Wordle).all()
 
 def create_wordle(data: WordPlayRequest, db: Session):
     try:
@@ -17,18 +16,17 @@ def create_wordle(data: WordPlayRequest, db: Session):
             n_tries= 1,
             is_correct= False,
         )
-        print(new_wordle)
         db.add(new_wordle)
         db.commit()
         db.refresh(new_wordle)
         return new_wordle
     except Exception as e:
-        print(f"el error {e}")
+        raise ValueError(f"Error creating wordle game {e}")
 
 def update_wordle(id: int, data: WordPlayUpdate, db: Session):
     wordle = db.query(Wordle).filter(Wordle.id == id).first()
     if not wordle:
-        raise HTTPException(status_code=404, detail="Wordle not found with that id.")
+        raise ValueError("Wordle not found with that id.")
    
     if wordle.n_tries == 5 :
         return wordle
@@ -37,6 +35,7 @@ def update_wordle(id: int, data: WordPlayUpdate, db: Session):
     wordle.word_attempt = data.word
     db.commit()
     db.refresh(wordle)
+
     return wordle
 
 def delete_all_plays(db: Session):
@@ -47,18 +46,18 @@ def delete_all_plays(db: Session):
     db.refresh()
     return { "message": "All of values were removed."}
 
-
 def compare_word_data(id: int, db:Session):
     try:
         wordle = db.query(Wordle).filter(Wordle.id == id).first()
         if not wordle:
-            raise HTTPException(status_code=404, detail="Wordle not found with that id.")
+            raise ValueError("Wordle not found with that id.")
         
         word_attempt = wordle.word_attempt
         word_correct = wordle.word_correct
         correct = filter(lambda lind: lind[1] in word_correct and lind[1] == word_correct[lind[0]], enumerate(word_attempt))
         different = filter(lambda lind: lind[1] in word_correct and lind[1] != word_correct[lind[0]], enumerate(word_attempt))
         incorrect = [l for l in wordle.word_attempt if l not in word_correct ]
+
         return WordCompareResponse(
             user_id=wordle.user_id,
             word_correct=wordle.word_correct,
@@ -70,8 +69,9 @@ def compare_word_data(id: int, db:Session):
             different_pos_index=list(different),
             incorrect_used_letters=incorrect
         )
+    
     except Exception as e:
-        print(f"en este caso el error es {e}")
+        raise ValueError(f"Error comparing {e}")
 
 def verify_word_external(word):
     return True

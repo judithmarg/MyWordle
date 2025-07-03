@@ -12,34 +12,43 @@ def get_all_wordle_attempts(db: Session=Depends(get_db)):
     """
     Get all wordle played by users 
     """
-    return get_all_wordle_plays(db)
+    try:
+        return get_all_wordle_plays(db)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/", response_model=WordPlayResponse)
 def create_word_first(word_data: WordPlayRequest, db: Session=Depends(get_db)):
     """
     Save the first attempt
     """
-    response = create_wordle(word_data, db)
-    if not response:
-        raise HTTPException(status_code=404, detail="Error with save data wordle")
-    return response
+    try:
+        response = create_wordle(word_data, db)
+        return response
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=f"Error with save data wordle {e}")
+
 
 @router.delete("/")
 def delete_all(db: Session=Depends(get_db)):
+    """
+    Remove all wordle plays 
+    """
     try:
         return delete_all_plays(db)
-    except Exception as e:
-        print(f"Error eliminando {e}")
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 @router.put("/{play_id}", response_model=WordPlayResponse)
 def update_word(play_id: int, word_data: WordPlayUpdate, db: Session=Depends(get_db)):
     """
     Change n tries automatically and update the new word
     """
-    response = update_wordle(play_id, word_data, db)
-    if not response:
-        raise HTTPException(status_code=404, detail="Error with save data wordle")
-    return response
+    try:
+        response = update_wordle(play_id, word_data, db)
+        return response
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 @router.get("/compare/{play_id}", response_model=WordCompareResponse)
 def compare_word(play_id: int, db: Session=Depends(get_db)):
@@ -48,18 +57,17 @@ def compare_word(play_id: int, db: Session=Depends(get_db)):
     """
     try:
         response = compare_word_data(play_id, db)
-        # if not response:
-        #     raise HTTPException(status_code=404, detail="Error with wordle id, it might not exist.")
         return response
-    except Exception as e:
-        print(f"en este caso el error triste es {e}")
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 @router.get("/verify/{word}")
 def verify_word(word: str):
     """
     Verify the word with a dictionary
     """
-    response = verify_word_external(word)
-    if not response:
-        raise HTTPException(status_code=404, detail="Bad connection with third app service")
-    return response
+    try:
+        response = verify_word_external(word)
+        return response
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=f"Bad connection and {e}")
