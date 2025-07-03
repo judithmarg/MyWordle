@@ -11,7 +11,7 @@ router = APIRouter(prefix="/users")
 def create_user(user_data: UserCreateRequest, db: Session=Depends(get_db)):
     response = create_user_service(user_data, db)
     if not response:
-        raise HTTPException(status_code=404, detail="Bad response while trying to create user.")
+        raise HTTPException(status_code=400, detail="Bad response while trying to create user.")
     return response
 
 @router.get("/{user_id}", response_model=UserResponse)
