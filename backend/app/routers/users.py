@@ -9,20 +9,23 @@ router = APIRouter(prefix="/users")
 
 @router.post("/", response_model=UserResponse)
 def create_user(user_data: UserCreateRequest, db: Session=Depends(get_db)):
-    response = create_user_service(user_data, db)
-    if not response:
-        raise HTTPException(status_code=400, detail="Bad response while trying to create user.")
-    return response
+    try:
+        response = create_user_service(user_data, db)
+        return response
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except RuntimeError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/{user_id}", response_model=UserResponse)
-def create_user(user_id: int, db: Session=Depends(get_db)):
+def get_user(user_id: int, db: Session=Depends(get_db)):
     response = get_user_by_id(user_id=user_id, db=db)
     if not response:
         raise HTTPException(status_code=404, detail="Bad response while trying to get specific user.")
     return response
 
 @router.put("/{user_id}", response_model=UserResponse)
-def create_user(user_id: int, user_data: UserUpdateRequest, db: Session=Depends(get_db)):
+def update_user(user_id: int, user_data: UserUpdateRequest, db: Session=Depends(get_db)):
     response = update_user_service(user_id, user_data, db)
     if not response:
         raise HTTPException(status_code=404, detail="Bad response while trying to update user.")
