@@ -1,4 +1,7 @@
 .container{ 
-    max-width: 50dvw;
-    min-width: 30dvw;
+    height: auto;
+    background-color: antiquewhite;
+    background: scroll;
+    max-width: 80vw;
+    min-width: 20vw;
 }
