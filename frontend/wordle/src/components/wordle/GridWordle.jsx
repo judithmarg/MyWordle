@@ -6,6 +6,7 @@ import styles from './wordle.module.css';
 import Zoom from '@mui/material/Zoom';
 import { compareWord } from '@/lib/gameService';
 import Paper from '@mui/material/Paper';
+import CellWordle from './CellWordle';
 
 const icon = (
 	<Paper sx={{ m: 1, width: 100, height: 100 }} elevation={4}>
@@ -19,16 +20,24 @@ const icon = (
 	</Paper>
 )
 
-const icon2 = (
-	<Box sx={{ width: '4rem', height: '4rem' }}>
-		<p style={{ color: 'black', fontSize: '1.2rem' }}>holitaa</p>
-	</Box>
-)
+
+
 export default function GridWordle({ idInfo = 17 }) { //info sera la respuesta de put o post
-	const [checked, setChecked] = useState(false);
-	const [infoCompare, setInfoCompare] = useState(null);
+	const [checked, setChecked] = useState(true);
+	const [textCompare, setTextCompare] = useState("");
 	const [wordleArray, setWordleArray] = useState(['pink', 'pink', 'pink', 'pink', 'pink']);
-	console.log(`hola ${wordleArray}`);
+	const handleKeyPress = (keyCode, key) => {
+		console.log(keyCode, key);
+	}
+	const icon2 = 
+	(
+		<div
+			style={{ width: '4rem', height: '4rem' }}
+			tabIndex={0}
+			onKeyDown={(e) => handleKeyPress(e.detail, e.key)}>
+			<p style={{ color: 'black', fontSize: '1.2rem' }}>letter</p>
+		</div>
+	)
 	const fetchCompareWord = async () => {
 		try {
 			const compareResult = await compareWord(idInfo);
@@ -46,6 +55,10 @@ export default function GridWordle({ idInfo = 17 }) { //info sera la respuesta d
 		}
 	}
 
+	const handleChange = (e) => {
+		setTextCompare(e.target.value);
+	};
+
 	return (
 		<Box sx={{maxWidth:'50vw', minWidth:'30vh'}}>
 			<Grid container spacing={1}>
@@ -59,18 +72,18 @@ export default function GridWordle({ idInfo = 17 }) { //info sera la respuesta d
 					</>
 
 				</Grid>
-				<Grid size={2.4} sx={{ backgroundColor: wordleArray[1] }}>
+				 <Grid size={2.4} sx={{ backgroundColor: wordleArray[1] }}>
 					<Zoom in={checked} style={{ transitionDelay: checked ? '500ms' : '0ms' }}>{icon2}</Zoom>
 				</Grid>
 				<Grid size={2.4} sx={{ backgroundColor: wordleArray[2] }}>
-					<Zoom in={checked} style={{ transitionDelay: checked ? '800ms' : '0ms' }}>{icon2}</Zoom>
+					<Zoom in={checked} style={{ transitionDelay: checked ? '800ms' : '0ms' }}><CellWordle /></Zoom>
 				</Grid>
-				<Grid size={2.4} sx={{ backgroundColor: wordleArray[3] }}>
-					<Zoom in={checked} style={{ transitionDelay: checked ? '1000ms' : '0ms' }}>{icon2}</Zoom>
+				{/*<Grid size={2.4} sx={{ backgroundColor: wordleArray[3] }}>
+					<Zoom in={checked} style={{ transitionDelay: checked ? '1000ms' : '0ms' }}><CellWordle /></Zoom>
 				</Grid>
 				<Grid size={2.4} sx={{ backgroundColor: wordleArray[4] }}>
-					<Zoom in={checked} style={{ transitionDelay: checked ? '1000ms' : '0ms' }}>{icon2}</Zoom>
-				</Grid>
+					<Zoom in={checked} style={{ transitionDelay: checked ? '1000ms' : '0ms' }}><CellWordle /></Zoom>
+				</Grid> */}
 			</Grid>
 		</Box>
 	);
