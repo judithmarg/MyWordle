@@ -1,21 +1,10 @@
-"use client";
 
-import { useState } from "react";
-import { Box } from "@mui/material";
-
-const CellWordle = () => {
-	const [letter, setLetter] = useState("");
-
-	const handleKeyPress = (keyCode, key) => {
-		console.log(keyCode, key);
-	}
+const CellWordle = ({letter}) => {
 	return (
 		<div
-			style={{ width: '4rem', height: '4rem' }}
-			tabIndex={0}
-			onKeyDown={(e) => handleKeyPress(e.detail, e.key)}
-			>
-			<p style={{ color: 'black', fontSize: '1.2rem' }}>{letter}</p>
+			style={{ height:'100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+		>
+			<p style={{ color: 'black', fontSize: '2rem', fontWeight: 'bolder', textAlign:'center', textTransform:'capitalize'}}>{letter}</p>
 		</div>
 	)
 };

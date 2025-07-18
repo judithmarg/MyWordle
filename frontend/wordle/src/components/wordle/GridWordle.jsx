@@ -8,34 +8,53 @@ import { compareWord } from '@/lib/gameService';
 import Paper from '@mui/material/Paper';
 import CellWordle from './CellWordle';
 
-const icon = (
-	<Paper sx={{ m: 1, width: 100, height: 100 }} elevation={4}>
-		<svg>
-			<Box
-				component="polygon"
-				points='0,100 50,00, 100,100'
-				sx={{ fill: 'white', strokeWidth: 1 }}
-			/>
-		</svg>
-	</Paper>
-)
-
-
-
 export default function GridWordle({ idInfo = 17 }) { //info sera la respuesta de put o post
 	const [checked, setChecked] = useState(true);
 	const [textCompare, setTextCompare] = useState("");
 	const [wordleArray, setWordleArray] = useState(['pink', 'pink', 'pink', 'pink', 'pink']);
-	const handleKeyPress = (keyCode, key) => {
-		console.log(keyCode, key);
+	const handleKeyPress = (key) => {
+		4
+		console.log(key);
+		setTextCompare(key);
 	}
-	const icon2 = 
-	(
+	const cell1 = (
 		<div
-			style={{ width: '4rem', height: '4rem' }}
+			style={{ height:'100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 			tabIndex={0}
-			onKeyDown={(e) => handleKeyPress(e.detail, e.key)}>
-			<p style={{ color: 'black', fontSize: '1.2rem' }}>letter</p>
+			onKeyDown={(e) => handleKeyPress(e.key)}>
+			<p style={{ color: 'black', fontSize: '2rem', fontWeight: 'bolder', textAlign:'center', textTransform:'capitalize' }}>{textCompare[0]}</p>
+		</div>
+	)
+	const cell2 = (
+		<div
+			style={{ height:'100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+			tabIndex={0}
+			onKeyDown={(e) => handleKeyPress(e.key)}>
+			<p style={{ color: 'black', fontSize: '2rem', fontWeight: 'bolder', textAlign:'center', textTransform:'capitalize'}}>{textCompare[1]}</p>
+		</div>
+	)
+	const cell3 = (
+		<div
+			style={{ height:'100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+			tabIndex={0}
+			onKeyDown={(e) => handleKeyPress(e.key)}>
+			<p style={{ color: 'black', fontSize: '2rem', fontWeight: 'bolder', textAlign:'center', textTransform:'capitalize'}}>{textCompare[2]}</p>
+		</div>
+	)
+	const cell4 = (
+		<div
+			style={{ height:'100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+			tabIndex={0}
+			onKeyDown={(e) => handleKeyPress(e.key)}>
+			<p style={{ color: 'black', fontSize: '2rem', fontWeight: 'bolder', textAlign:'center', textTransform:'capitalize'}}>{textCompare[3]}</p>
+		</div>
+	)
+	const cell5 = (
+		<div
+			style={{ height:'100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+			tabIndex={0}
+			onKeyDown={(e) => handleKeyPress(e.key)}>
+			<p style={{ color: 'black', fontSize: '2rem', fontWeight: 'bolder', textAlign:'center', textTransform:'capitalize'}}>{textCompare[4]}</p>
 		</div>
 	)
 	const fetchCompareWord = async () => {
@@ -55,35 +74,37 @@ export default function GridWordle({ idInfo = 17 }) { //info sera la respuesta d
 		}
 	}
 
-	const handleChange = (e) => {
+	const handleChangeText = (e) => {
 		setTextCompare(e.target.value);
 	};
 
 	return (
-		<Box sx={{maxWidth:'50vw', minWidth:'30vh'}}>
-			<Grid container spacing={1}>
-				<Grid size={2.4} sx={{ backgroundColor: wordleArray[0], width: '50px', height: '50px'  }}>
-					<>
-						<Zoom in={checked} >
-							<Paper sx={{ width: '100%', height: '100%' }}>
-								<svg><Box><p style={{ color: 'black', fontSize: '1rem' }}>holitaa</p></Box></svg>
-							</Paper>
-						</Zoom>
-					</>
+		<Box sx={{position:'relative'}}>
+			<input
+				type="text"
+				name="age"
+				id="age"
+				step="2"
+				style={{ position: 'absolute', letterSpacing:'44px', fontSize:'2rem',textTransform:'capitalize',opacity: 0, width: 'auto', height: '50px', borderRadius:'30px', zIndex:40, left:'15px' }}
+				onKeyDown={handleChangeText}
+				tabIndex={0}
+			/>
 
+			<Grid container spacing={1}>
+				<Grid size={2.4} sx={{ backgroundColor: wordleArray[1], width: '50px', height: '50px', borderRadius:'30px' }}>
+					<Zoom in={checked} style={{ transitionDelay: checked ? '500ms' : '0ms' }}>{cell1}</Zoom>
 				</Grid>
-				 <Grid size={2.4} sx={{ backgroundColor: wordleArray[1] }}>
-					<Zoom in={checked} style={{ transitionDelay: checked ? '500ms' : '0ms' }}>{icon2}</Zoom>
+				<Grid size={2.4} sx={{ backgroundColor: wordleArray[1], width: '50px', height: '50px', borderRadius:'30px' }}>
+					<Zoom in={checked} style={{ transitionDelay: checked ? '500ms' : '0ms' }}>{cell2}</Zoom>
+				</Grid> <Grid size={2.4} sx={{ backgroundColor: wordleArray[1], width: '50px', height: '50px', borderRadius:'30px' }}>
+					<Zoom in={checked} style={{ transitionDelay: checked ? '500ms' : '0ms' }}>{cell3}</Zoom>
+				</Grid> <Grid size={2.4} sx={{ backgroundColor: wordleArray[1], width: '50px', height: '50px', borderRadius:'30px' }}>
+					<Zoom in={checked} style={{ transitionDelay: checked ? '500ms' : '0ms' }}>{cell4}</Zoom>
+				</Grid> <Grid size={2.4} sx={{ backgroundColor: wordleArray[1], width: '50px', height: '50px', borderRadius:'30px' }}>
+					<Zoom in={checked} style={{ transitionDelay: checked ? '500ms' : '0ms' }}>
+						<CellWordle letter={textCompare[4]} />
+					</Zoom>
 				</Grid>
-				<Grid size={2.4} sx={{ backgroundColor: wordleArray[2] }}>
-					<Zoom in={checked} style={{ transitionDelay: checked ? '800ms' : '0ms' }}><CellWordle /></Zoom>
-				</Grid>
-				{/*<Grid size={2.4} sx={{ backgroundColor: wordleArray[3] }}>
-					<Zoom in={checked} style={{ transitionDelay: checked ? '1000ms' : '0ms' }}><CellWordle /></Zoom>
-				</Grid>
-				<Grid size={2.4} sx={{ backgroundColor: wordleArray[4] }}>
-					<Zoom in={checked} style={{ transitionDelay: checked ? '1000ms' : '0ms' }}><CellWordle /></Zoom>
-				</Grid> */}
 			</Grid>
 		</Box>
 	);
